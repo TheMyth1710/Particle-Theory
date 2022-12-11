@@ -1,8 +1,6 @@
 var time, ctx;
 var oldValues = [];
 var FPS = 60;
-// var ctx = document.querySelector('#poly').getContext('2d');
-// if(document.readyState === "complete" && window.history.replaceState) window.history.replaceState( null, null, window.location.href );
 Array.prototype.remove = function(value) {
   return  this.filter(item => item !== value)
 }
@@ -15,7 +13,7 @@ function zoom(elm, zoomIn=true, initial=false, factor=0.2){
 }
 
 function particleGenerator(){
-    const valueRanges = {"Polygon Size": [2, 100000], "Dimension (m)": [0,1000], "Velocity (m/s)": [0,1000]};
+    const valueRanges = {"Polygon Size": [2, 50000], "Dimension (m)": [0,1000], "Velocity (m/s)": [0,1000]};
     var moveAhead = true;
     var count = 0;
     document.querySelectorAll(".inputField").forEach(input => {
@@ -28,8 +26,7 @@ function particleGenerator(){
               if (text == "Polygon Size") inc = 1;
               if (oldValues.includes(parseFloat(value))) oldValues = oldValues.remove(parseFloat(value))
               else{
-                input.parentElement.querySelector(".error-text").innerHTML = `Only values between ${valueRanges[text][0]+inc} - ${valueRanges[text][1]} are allowed!`;
-                // input.parentElement.querySelector(".error-text").innerHTML = `Values should start from ${valueRanges[text][0]+inc}`
+                input.parentElement.querySelector(".error-text").innerHTML = `Only values between ${valueRanges[text][0]+inc} - ${Number(valueRanges[text][1]).toLocaleString()} are allowed!`;
                 input.parentElement.classList.add("error");
               }
           }
@@ -49,7 +46,6 @@ function particleGenerator(){
     console.log(count, moveAhead)
     if (moveAhead){
         if (document.querySelector("#poly")) document.querySelector("#poly").remove();
-        console.log(document.querySelector("#content").style);
         if (screen.width <= 768) document.querySelector("#content").style.borderBottom = "3px solid var(--gray)";
         var tempCTX = document.createElement("canvas"); tempCTX.setAttribute("id", "poly"); document.querySelector(".sub-elm").prepend(tempCTX)
         ctx = document.querySelector("#poly").getContext("2d");
@@ -76,7 +72,6 @@ const main = (n, v) => {
   ctx.reset();
   init(n, v);
   requestAnimationFrame(update);
-  console.log(state.magnitude)
 };
 
 const init = (n, v) => {
