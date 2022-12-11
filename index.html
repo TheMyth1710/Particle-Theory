@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Generate Moving Particles</title>
+</head>
+<body>
+    <h1 class="main-title">Particle Generator!</h1>
+    <div class="container">
+        <div class="container-elm">
+            <form class="inputForm">
+                <div class="formSection formTitle">
+                    <h1>What are you waiting for<span style="margin-left: 5px; color: var(--teal); font-size: clamp(2rem, 4vw, 4rem);">?</span></h1>
+                </div>
+                <div class="formSection">
+                    <div class="inputField">
+                        <input type="number" id="size" maxlength="62" placeholder=" " />
+                        <span class="special">Polygon Size</span>
+                    </div>
+                    <p class="error-text"></p>
+                </div>
+                <div class="formSection">
+                    <div class="inputField">
+                        <input type="number" id="length" maxlength="62" placeholder=" " />
+                        <span>Dimension (m)</span>
+                    </div>
+                    <p class="error-text"></p>
+                </div>
+                <div class="formSection">
+                    <div class="inputField">
+                        <input type="number" id="velocity" maxlength="128" placeholder=" " />
+                        <span>Velocity (m/s)</span>
+                    </div>
+                    <p class="error-text"></p>
+                </div>
+                <div class="formSection formButton centered">
+                    <button class="btn btn-curve" style="width: 250px;" type="submit" onclick="particleGenerator()">Generate Particles!</button>
+                </div>
+            </form>
+        </div>
+        <div class="container-elm">
+            <div class="sub-elm">
+                <canvas id="poly"></canvas>
+                <div class="zoom-holder">
+                    <button class="btn btn-curve" onclick="zoom(document.querySelector('#poly'), true)">Zoom In</button>
+                    <button class="btn btn-curve" onclick="zoom(document.querySelector('#poly'), false)">Zoom Out</button>
+                </div>
+                <h3 class="time"><span class="cursor">&nbsp;</span></h3>
+            </div>
+        </div>
+    </div>
+    <a class="copyright" href="https://github.com/TheMyth1710" target="_blank">Copyright <span class="copyright-symbol">&#169;</span>  TheMyth1710</a>
+    <script type="text/javascript" src="particles.js"></script>
+</body>
+</html>
