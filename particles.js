@@ -1,6 +1,11 @@
 var time;
 var oldValues = [];
-if(document.readyState === "complete" && window.history.replaceState) window.history.replaceState( null, null, window.location.href );
+var FPS = 60;
+var ctx = document.querySelector('#poly').getContext('2d');
+// if(document.readyState === "complete" && window.history.replaceState) window.history.replaceState( null, null, window.location.href );
+Array.prototype.remove = function(value) {
+  return  this.filter(item => item !== value)
+}
 function zoom(elm, zoomIn=true, initial=false, factor=0.2){
     var scale = parseFloat(elm.style.scale)
     if (!scale) scale = initial;
@@ -17,42 +22,37 @@ function particleGenerator(){
         var value = input.querySelector("input").value;
         var text = input.querySelector("span").innerHTML;
         try{
-          if (value == '' || oldValues.includes(parseInt(value)) || value <= valueRanges[text][0] || value > valueRanges[text][1]){
-              var inc = 0
+          if (value == '' || oldValues.includes(parseFloat(value)) || value <= valueRanges[text][0] || value > valueRanges[text][1]){
+              var inc = 0;
               count += 1;
               if (text == "Polygon Size") inc = 1;
-              if (!oldValues.includes(parseInt(value))){
-                if(valueRanges[text][1]){
-                  input.parentElement.querySelector(".error-text").innerHTML = `Only values between ${valueRanges[text][0]+inc} - ${valueRanges[text][1]} are allowed!`;
-                }else{
-                  input.parentElement.querySelector(".error-text").innerHTML = `Values should start from ${valueRanges[text][0]+inc}`
-                }
+              if (oldValues.includes(parseFloat(value))) oldValues = oldValues.remove(parseFloat(value))
+              else{
+                if (valueRanges[text][1]) input.parentElement.querySelector(".error-text").innerHTML = `Only values between ${valueRanges[text][0]+inc} - ${valueRanges[text][1]} are allowed!`;
+                else input.parentElement.querySelector(".error-text").innerHTML = `Values should start from ${valueRanges[text][0]+inc}`
                 input.parentElement.classList.add("error");
               }
-              // moveAhead = false;
           }
           else if (value.includes('.') && text == "Polygon Size"){
               input.parentElement.classList.add("error")
               input.parentElement.querySelector(".error-text").innerHTML = `Size can't be in decimals!`;
-              // moveAhead = false;
           }
           else{
               input.parentElement.classList.remove("error");
               input.parentElement.querySelector(".error-text").innerHTML = "";
-              // moveAhead = true;
           }
-          if (input.parentElement.classList.contains("error")){
-            moveAhead = false;
-          }
+          if (input.parentElement.classList.contains("error")) moveAhead = false;
         }catch{
         }
     })
-    if (count >= 3) moveAhead = false;
+    if (count >= 4) moveAhead = false;
     if (moveAhead){
-      console.log('b')
-        var n = parseInt(document.querySelector("#size").value), len = parseInt(document.querySelector("#length").value), v = parseInt(document.querySelector("#velocity").value);
-        oldValues = [n, len, v]
-        ctx.reset();
+        document.querySelector("#poly").remove();
+        var tempCTX = document.createElement("canvas"); tempCTX.setAttribute("id", "poly"); document.querySelector(".sub-elm").prepend(tempCTX)
+        ctx = document.querySelector("#poly").getContext("2d");
+        var n = parseInt(document.querySelector("#size").value), len = parseFloat(document.querySelector("#length").value), v = parseFloat(document.querySelector("#velocity").value);
+        FPS = parseFloat(document.querySelector("#fps").value);
+        oldValues = [n, len, v, FPS]
         main(n, 1+v/1000);
         zoom(ctx.canvas, true, true, len/1000);
         document.querySelector(".zoom-holder").style.animation = "scaleIn 0.5s forwards";
@@ -63,20 +63,18 @@ function particleGenerator(){
     }
 }
 function getTime(n, s, v){
-  console.log(n, s, v)
   return Math.round(s/(v*Math.cos((180*n - 360)/(2*n) * Math.PI/180))*100)/100;
 }
 
-const ctx = document.getElementById('poly').getContext('2d');
 var state = {}
 const main = (n, v) => {
   ctx.reset();
   init(n, v);
   requestAnimationFrame(update);
+  console.log(state.magnitude)
 };
 
 const init = (n, v) => {
-  Object.assign(ctx, { strokeStyle: 'var(--teal)', lineWidth: 1 });
   state = {
     magnitude: v,
     origin: {
@@ -92,9 +90,7 @@ const init = (n, v) => {
   };
 };
 
-const FPS = 30;
 let lastTimestamp = 0;
-
 const update = (timestamp) => {
   let inset = state.nodeInset + state.magnitude;
   if (inset > state.radius) {
@@ -106,10 +102,8 @@ const update = (timestamp) => {
   }
   state.nodeInset = inset;
   state.nodeRotation += (Math.PI / 36);
-  
   requestAnimationFrame(update);
   if (timestamp - lastTimestamp < 1000 / FPS) return;
-  
   redraw();
   lastTimestamp = timestamp;
 };
@@ -192,7 +186,6 @@ function type() {
     var timeText = `Time: ${time}s`
     var textDOM = document.querySelector(".time");
     var cursorSpan = document.querySelector(".cursor");
-    // textDOM.innerHTML += "<span class='cursor'>&nbsp;</span>"
     Object.assign(cursorSpan.style, {"background-color": "var(--white)", "animation": "blink 1s 5"})
     cursorSpan.addEventListener("animationend", () => {
       cursorSpan.style.animation = "";

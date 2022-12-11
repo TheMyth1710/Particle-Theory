@@ -65,9 +65,9 @@ body, html{
     flex-wrap: wrap;
     width: 90%;
     margin: auto;
-    margin-top: 170px;
-    height: calc(92vh - 170px);
-    overflow: hidden;
+    margin-top: 140px;
+    height: calc(92vh - 140px);
+    /* overflow: hidden; */
 }
 .container-elm{
     display: flex;
@@ -238,6 +238,11 @@ input[type=number]::-webkit-outer-spin-button {
 .inputField input:not(:placeholder-shown)+span.special{
     -webkit-transform: scale(0.8) translateY(-50%) translateX(-10px);
     transform: scale(0.8) translateY(-50%) translateX(-10px);
+}
+.inputField input:focus+span.special-1,
+.inputField input:not(:placeholder-shown)+span.special-1{
+    -webkit-transform: scale(0.8) translateY(-50%) translateX(-16px);
+    transform: scale(0.8) translateY(-50%) translateX(-16px);
 }
 .formSection.error .inputField input:focus+span, .formSection.error .inputField input:not(:placeholder-shown)+span{
     color: var(--red);
