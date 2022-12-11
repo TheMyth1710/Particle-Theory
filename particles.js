@@ -10,7 +10,7 @@ function zoom(elm, zoomIn=true, initial=false, factor=0.2){
 }
 
 function particleGenerator(){
-    const valueRanges = {"Dimension (m)": [0,1000]};
+    const valueRanges = {"Polygon Size": [2], "Dimension (m)": [0,1000], "Velocity (m/s)": [0,1000]};
     var moveAhead = true;
     var count = 0;
     document.querySelectorAll(".inputField").forEach(input => {
@@ -22,27 +22,34 @@ function particleGenerator(){
               count += 1;
               if (text == "Polygon Size") inc = 1;
               if (!oldValues.includes(parseInt(value))){
-                input.parentElement.querySelector(".error-text").innerHTML = `Only values between ${valueRanges[text][0]+inc} - ${valueRanges[text][1]} are allowed!`;
+                if(valueRanges[text][1]){
+                  input.parentElement.querySelector(".error-text").innerHTML = `Only values between ${valueRanges[text][0]+inc} - ${valueRanges[text][1]} are allowed!`;
+                }else{
+                  input.parentElement.querySelector(".error-text").innerHTML = `Values should start from ${valueRanges[text][0]+inc}`
+                }
                 input.parentElement.classList.add("error");
               }
-              moveAhead = false;
+              // moveAhead = false;
           }
           else if (value.includes('.') && text == "Polygon Size"){
               input.parentElement.classList.add("error")
               input.parentElement.querySelector(".error-text").innerHTML = `Size can't be in decimals!`;
-              moveAhead = false;
+              // moveAhead = false;
           }
           else{
               input.parentElement.classList.remove("error");
               input.parentElement.querySelector(".error-text").innerHTML = "";
-              moveAhead = true;
+              // moveAhead = true;
+          }
+          if (input.parentElement.classList.contains("error")){
+            moveAhead = false;
           }
         }catch{
         }
     })
-    if (count < 3) moveAhead = true;
-    else moveAhead = false;
+    if (count >= 3) moveAhead = false;
     if (moveAhead){
+      console.log('b')
         var n = parseInt(document.querySelector("#size").value), len = parseInt(document.querySelector("#length").value), v = parseInt(document.querySelector("#velocity").value);
         oldValues = [n, len, v]
         ctx.reset();
@@ -69,7 +76,7 @@ const main = (n, v) => {
 };
 
 const init = (n, v) => {
-  Object.assign(ctx, { strokeStyle: 'green', lineWidth: 1 });
+  Object.assign(ctx, { strokeStyle: 'var(--teal)', lineWidth: 1 });
   state = {
     magnitude: v,
     origin: {
@@ -123,16 +130,16 @@ const defaultPolygonOptions = {
 };
 
 /**
-//  * @param {CanvasRenderingContext2D} ctx - Canvas 2D context
-//  * @param {Number} x - origin x-position
-//  * @param {Number} y - origin y-position
-//  * @param {Number} n - number of points
-//  * @param {Number} radius - radius of polygon
-//  * @param {Object} [options] - configuration options
-//  * @param {Number} [options.nodeInset] - insets for nodes
-//  * @param {Number} [options.nodeSize] - size of node
-//  * @param {Number} [options.nodeRotation] - rotation of nodes
-//  * @param {Number} [options.rotation] - polygon rotation
+//  * @param {CanvasRenderingContext2D} ctx
+//  * @param {Number} x
+//  * @param {Number} y
+//  * @param {Number} n
+//  * @param {Number} radius
+//  * @param {Object} [options]
+//  * @param {Number} [options.nodeInset]
+//  * @param {Number} [options.nodeSize]
+//  * @param {Number} [options.nodeRotation]
+//  * @param {Number} [options.rotation]
  */
 const drawPolygon = (ctx, x, y, n, radius, options = {}) => {
   const opts = { ...defaultPolygonOptions, ...options };
@@ -150,7 +157,6 @@ const drawPolygon = (ctx, x, y, n, radius, options = {}) => {
   }
   ctx.fillStyle = "#00818A";
   ctx.fill();
-
   if (!opts.nodeSize) return;
   const dist = radius - opts.nodeInset;
   for (let i = 1; i <= n; i += 1) {

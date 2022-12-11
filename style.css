@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Nerko+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nerko+One&family=Fira+Sans:wght@300&display=swap');
 :root{
     --dark-gray: #283149;
     --gray: #404B69;
@@ -34,17 +34,18 @@ body, html{
 .sub-title{
     width: fit-content;
     max-width: 600px;
-    color: var(--light-blue);
     text-align: center;
-    font-weight: 400;
     padding: 10px;
-    font-family: cursive;
     margin-top: 90px;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
     background-color: var(--dark-gray);
     z-index: 10;
+    font-size: 13px;
+    font-family: "Fira Sans", sans-serif;
+    font-weight: 300;
+    color: #90aeb8;
 }
 .main-title::before {
     content: "";
