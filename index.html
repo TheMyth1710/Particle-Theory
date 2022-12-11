@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta property="og:title" content="Particle Theory">
     <meta property="og:url" content="https://themyth1710.github.io/Particle-Theory/">
-    <meta property="og:description" content="Let's apply some physics via web development! This website calculates the time taken for all particles situated at the polygon's vertices (moving at a constant speed towards each other), to meet each other.">
+    <meta property="og:description" content="Let's apply some physics via web development! This website calculates the time taken for all particles situated on a polygon's vertices (moving at a constant speed towards each other) to collide.">
     <meta property="og:image" content="https://themyth1710.github.io/Particle-Theory/image.jpg">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,9 +14,9 @@
 </head>
 <body>
     <h1 class="main-title">Particle Generator!</h1>
-    <code class="sub-title">Calculates the time taken for all particles situated at the polygon's vertices (moving at a constant speed towards each other), to meet each other.</code>
+    <code class="sub-title">Calculates the time taken for all particles situated on a polygon's vertices (moving at a constant speed towards each other) to collide.</code>
     <div class="container">
-        <div class="container-elm">
+        <div class="container-elm" id="content">
             <form class="inputForm">
                 <div class="formSection">
                     <div class="formTitle">
@@ -56,7 +56,7 @@
         </div>
         <div class="container-elm">
             <div class="sub-elm">
-                <canvas id="poly"></canvas>
+                <!-- <canvas id="poly"></canvas> -->
                 <div class="zoom-holder">
                     <button class="btn btn-curve" onclick="zoom(document.querySelector('#poly'), true)">Zoom In</button>
                     <button class="btn btn-curve" onclick="zoom(document.querySelector('#poly'), false)">Zoom Out</button>

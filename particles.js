@@ -1,7 +1,7 @@
-var time;
+var time, ctx;
 var oldValues = [];
 var FPS = 60;
-var ctx = document.querySelector('#poly').getContext('2d');
+// var ctx = document.querySelector('#poly').getContext('2d');
 // if(document.readyState === "complete" && window.history.replaceState) window.history.replaceState( null, null, window.location.href );
 Array.prototype.remove = function(value) {
   return  this.filter(item => item !== value)
@@ -15,7 +15,7 @@ function zoom(elm, zoomIn=true, initial=false, factor=0.2){
 }
 
 function particleGenerator(){
-    const valueRanges = {"Polygon Size": [2], "Dimension (m)": [0,1000], "Velocity (m/s)": [0,1000]};
+    const valueRanges = {"Polygon Size": [2, 100000], "Dimension (m)": [0,1000], "Velocity (m/s)": [0,1000]};
     var moveAhead = true;
     var count = 0;
     document.querySelectorAll(".inputField").forEach(input => {
@@ -28,8 +28,8 @@ function particleGenerator(){
               if (text == "Polygon Size") inc = 1;
               if (oldValues.includes(parseFloat(value))) oldValues = oldValues.remove(parseFloat(value))
               else{
-                if (valueRanges[text][1]) input.parentElement.querySelector(".error-text").innerHTML = `Only values between ${valueRanges[text][0]+inc} - ${valueRanges[text][1]} are allowed!`;
-                else input.parentElement.querySelector(".error-text").innerHTML = `Values should start from ${valueRanges[text][0]+inc}`
+                input.parentElement.querySelector(".error-text").innerHTML = `Only values between ${valueRanges[text][0]+inc} - ${valueRanges[text][1]} are allowed!`;
+                // input.parentElement.querySelector(".error-text").innerHTML = `Values should start from ${valueRanges[text][0]+inc}`
                 input.parentElement.classList.add("error");
               }
           }
@@ -46,8 +46,11 @@ function particleGenerator(){
         }
     })
     if (count >= 4) moveAhead = false;
+    console.log(count, moveAhead)
     if (moveAhead){
-        document.querySelector("#poly").remove();
+        if (document.querySelector("#poly")) document.querySelector("#poly").remove();
+        console.log(document.querySelector("#content").style);
+        if (screen.width <= 768) document.querySelector("#content").style.borderBottom = "3px solid var(--gray)";
         var tempCTX = document.createElement("canvas"); tempCTX.setAttribute("id", "poly"); document.querySelector(".sub-elm").prepend(tempCTX)
         ctx = document.querySelector("#poly").getContext("2d");
         var n = parseInt(document.querySelector("#size").value), len = parseFloat(document.querySelector("#length").value), v = parseFloat(document.querySelector("#velocity").value);
@@ -58,8 +61,10 @@ function particleGenerator(){
         document.querySelector(".zoom-holder").style.animation = "scaleIn 0.5s forwards";
         if (document.body.clientWidth > 720) document.querySelector(".zoom-holder").style.display = "flex";
         time = getTime(n, len, parseFloat(document.querySelector("#velocity").value));
-        document.querySelector(".time").innerHTML = "<span class='cursor'>&nbsp;</span>";
-        type();
+        if (!document.querySelector(".time").innerHTML.includes(time)){
+            document.querySelector(".time").innerHTML = "<span class='cursor'>&nbsp;</span>";
+          type();
+        }
     }
 }
 function getTime(n, s, v){
@@ -186,11 +191,8 @@ function type() {
     var timeText = `Time: ${time}s`
     var textDOM = document.querySelector(".time");
     var cursorSpan = document.querySelector(".cursor");
-    Object.assign(cursorSpan.style, {"background-color": "var(--white)", "animation": "blink 1s 5"})
-    cursorSpan.addEventListener("animationend", () => {
-      cursorSpan.style.animation = "";
-      cursorSpan.style.backgroundColor = "transparent";
-    })
+    cursorSpan.style.animation = "blink 1s 3";
+    // Object.assign(cursorSpan.style, {"animation": "blink 1s 3"})
     function repeatType(){
       if (charIndex < timeText.length) {
           if(!cursorSpan.classList.contains("typing")) cursorSpan.classList.add("typing");
