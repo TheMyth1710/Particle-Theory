@@ -47,12 +47,13 @@ function particleGenerator(){
         zoom(ctx.canvas, true, true, len/1000);
         document.querySelector(".zoom-holder").style.animation = "scaleIn 0.5s forwards";
         if (document.body.clientWidth > 720) document.querySelector(".zoom-holder").style.display = "flex";
-        time = getTime(n, len, parseInt(document.querySelector("#velocity").value));
+        time = getTime(n, len, parseFloat(document.querySelector("#velocity").value));
         document.querySelector(".time").innerHTML = "<span class='cursor'>&nbsp;</span>";
         type();
     }
 }
 function getTime(n, s, v){
+  console.log(n, s, v)
   return Math.round(s/(v*Math.cos((180*n - 360)/(2*n) * Math.PI/180))*100)/100;
 }
 
