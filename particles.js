@@ -183,7 +183,7 @@ document.querySelectorAll("button").forEach(btn => {
 const typingDelay = 100;
 let charIndex = 0;
 function type() {
-    var timeText = `Time: ${time}s`
+    var timeText = `Collision Time: ${time}s`
     var textDOM = document.querySelector(".time");
     var cursorSpan = document.querySelector(".cursor");
     cursorSpan.style.animation = "blink 1s 3";
