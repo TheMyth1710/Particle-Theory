@@ -10,31 +10,34 @@ function zoom(elm, zoomIn=true, initial=false, factor=0.2){
 }
 
 function particleGenerator(){
-    const valueRanges = {"Polygon Size": [2,12], "Dimension (m)": [0,1000], "Velocity (m/s)": [0,1000]};
+    const valueRanges = {"Dimension (m)": [0,1000]};
     var moveAhead = true;
     var count = 0;
     document.querySelectorAll(".inputField").forEach(input => {
         var value = input.querySelector("input").value;
         var text = input.querySelector("span").innerHTML;
-        if (value == '' || oldValues.includes(parseInt(value)) || value <= valueRanges[text][0] || value > valueRanges[text][1]){
-            var inc = 0
-            count += 1;
-            if (text == "Polygon Size") inc = 1;
-            if (!oldValues.includes(parseInt(value))){
-              input.parentElement.querySelector(".error-text").innerHTML = `Only values between ${valueRanges[text][0]+inc} - ${valueRanges[text][1]} are allowed!`;
-              input.parentElement.classList.add("error");
-            }
-            moveAhead = false;
-        }
-        else if (value.includes('.') && text == "Polygon Size"){
-            input.parentElement.classList.add("error")
-            input.parentElement.querySelector(".error-text").innerHTML = `Size can't be in decimals!`;
-            moveAhead = false;
-        }
-        else{
-            input.parentElement.classList.remove("error");
-            input.parentElement.querySelector(".error-text").innerHTML = "";
-            moveAhead = true;
+        try{
+          if (value == '' || oldValues.includes(parseInt(value)) || value <= valueRanges[text][0] || value > valueRanges[text][1]){
+              var inc = 0
+              count += 1;
+              if (text == "Polygon Size") inc = 1;
+              if (!oldValues.includes(parseInt(value))){
+                input.parentElement.querySelector(".error-text").innerHTML = `Only values between ${valueRanges[text][0]+inc} - ${valueRanges[text][1]} are allowed!`;
+                input.parentElement.classList.add("error");
+              }
+              moveAhead = false;
+          }
+          else if (value.includes('.') && text == "Polygon Size"){
+              input.parentElement.classList.add("error")
+              input.parentElement.querySelector(".error-text").innerHTML = `Size can't be in decimals!`;
+              moveAhead = false;
+          }
+          else{
+              input.parentElement.classList.remove("error");
+              input.parentElement.querySelector(".error-text").innerHTML = "";
+              moveAhead = true;
+          }
+        }catch{
         }
     })
     if (count < 3) moveAhead = true;
