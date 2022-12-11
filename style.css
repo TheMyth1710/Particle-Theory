@@ -31,6 +31,21 @@ body, html{
     background-color: var(--dark-gray);
     z-index: 10;
 }
+.sub-title{
+    width: fit-content;
+    max-width: 400px;
+    text-align: center;
+    color: var(--white);
+    font-weight: 400;
+    padding: 10px;
+    font-family: cursive;
+    margin-top: 90px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--dark-gray);
+    z-index: 10;
+}
 .main-title::before {
     content: "";
     position: absolute;
@@ -42,14 +57,15 @@ body, html{
     transform: skew(-12deg) translateX(-50%);
     background-color: var(--teal);
     z-index: -1;
-  }
+}
 .container{
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     width: 90%;
     margin: auto;
-    height: 92vh;
+    margin-top: 170px;
+    height: calc(92vh - 170px);
     overflow: hidden;
 }
 .container-elm{
@@ -317,7 +333,7 @@ input[type=number]::-webkit-outer-spin-button {
 @media only screen and (max-width: 48rem){
     .container{
         height: 100vh;
-        margin-top: 100px;
+        margin-top: 170px;
         align-items: center;
         flex-direction: column;
         border: 1px solid black;
@@ -334,6 +350,11 @@ input[type=number]::-webkit-outer-spin-button {
     }
     .main-title::before{
         max-width: 90%;
+    }
+    .sub-title{
+        width: 80%;
+        margin-top: 70px;
+        font-size: 14px;
     }
     .formTitle h1{
         font-size: 22px;
